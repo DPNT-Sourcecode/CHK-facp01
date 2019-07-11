@@ -8,4 +8,3 @@ class TestSum():
 
 s = TestSum()
 s.test_sum()
-
