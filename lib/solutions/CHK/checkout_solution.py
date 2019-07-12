@@ -10,5 +10,5 @@ def checkout(skus):
 	grand_tot = 0
 	print (ccc)
 	for (cc,num) in ccc.items():
-		print (sku)
+		print (cc,num)
 	return grand_tot
