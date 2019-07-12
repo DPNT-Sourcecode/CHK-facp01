@@ -2,7 +2,13 @@
 
 # noinspection PyUnusedLocal
 # skus = unicode string
-def checkout(skus):
-	for sku in skus:
-		print (sku)
+from collections import Counter
 
+def checkout(skus):
+	ccc = Counter([x for x in skus])
+	tot = 0
+	grand_tot = 0
+	print (ccc)
+	for (cc,num) in ccc.items():
+		print (sku)
+	return grand_tot
