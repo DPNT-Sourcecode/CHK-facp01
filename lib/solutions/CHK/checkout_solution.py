@@ -22,3 +22,9 @@ def checkout(skus):
 		grand_tot += tot
 		print ("cc: {},num: {} price: {} so: {} tot: {} grand_tot: {}".format(cc,num,price,so,tot,grand_tot))
 	return grand_tot
+
+def test():
+	goods = "ABCDABCD"
+	checkout(goods)
+
+test()
