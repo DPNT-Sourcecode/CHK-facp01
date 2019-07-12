@@ -18,7 +18,7 @@ def checkout(skus):
 		if price == 0 and not so:
 			return -1
 		num_so, p_so = (so[0], so[1]) if so else (1,0)  # get special price
-		tot = ( num/num_so * p_so) + ( num % num_so * price) if so else num * price  # price special offers + normal price
+		tot = ( num//num_so * p_so) + ( num % num_so * price) if so else num * price  # price special offers + normal price
 		grand_tot += tot
 		print ("cc: {},num: {} price: {} so: {} tot: {} grand_tot: {}".format(cc,num,price,so,tot,grand_tot))
 	return grand_tot
