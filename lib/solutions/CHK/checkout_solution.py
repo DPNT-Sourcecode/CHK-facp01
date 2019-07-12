@@ -27,4 +27,4 @@ def test():
 	goods = "ABCDABCD"
 	checkout(goods)
 
-test()
+### test()
