@@ -21,8 +21,14 @@ SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)
 FreeOffers    = { 'E':[(2,'B')] } 
 
 # debug options ...
-#debug = print    		# uncomment - to turn on extra debug and comment out line below
-def debug(*argv): pass	# comment out for additional debug...
+debug = print    		# uncomment - to turn on extra debug and comment out line below
+#def debug(*argv): pass	# comment out for additional debug...
+
+def skusValid(cntSkus):
+	''' check the skus all exist in the sperciaqlOffers '''
+	validSkus = map(lambda x: x in cntSkus, SpecialOffers.keys())
+	return all(validSkus)
+
 
 def tot_free_offers(cc, num, cntSkus ):
     '''
@@ -73,6 +79,8 @@ def checkout(skus):
 	                2C = 2C(40)      ==> 265
 	'''
 	cntSkus = Counter([x for x in skus])
+	if not skusValid(cntSkus):
+		return -1
 	tot = 0
 	grand_tot = 0
 	debug(SpecialOffers)
@@ -88,30 +96,38 @@ def checkout(skus):
 
 # test suite...
 def test():
-	goods = "AAAABBCC"
-	res = checkout(goods)
-	print ("test 1 - res: {} ==> ".format(res) + "True" if (res == 265) else "False")
+	# goods = "AAAABBCC"
+	# res = checkout(goods)
+	# print ("test 1 - res: {} ==> ".format(res) + "True" if (res == 265) else "False")
 
-	goods = "AAAEE"
-	res = checkout(goods)
-	print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
+	# goods = "AAAEE"
+	# res = checkout(goods)
+	# print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
 
 
-	goods = "AAAEEBB"
-	res = checkout(goods)
-	print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 225) else "False")
+	# goods = "AAAEEBB"
+	# res = checkout(goods)
+	# print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 225) else "False")
 
-	goods = "ABBBBBBBBCCC"
-	res = checkout(goods)
-	print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
+	# goods = "ABBBBBBBBCCC"
+	# res = checkout(goods)
+	# print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
 
-	res = price_sku('E', 3 )		# EEE
-	print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
+	# res = price_sku('E', 3 )		# EEE
+	# print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
 
-	skus = 'EEEEEEE'
-	cntSkus = Counter([x for x in skus])
-	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
-	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
+	# skus = 'EEEEEEE'
+	# cntSkus = Counter([x for x in skus])
+	# res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
+	# print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
+
+#   invalid data tests
+	data = [ "a", "-", "ABCa"]
+	for goods in data:
+		goods = "a"
+		res = checkout(goods)
+		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
+
 
 # unit testing
-### test()
+test()
