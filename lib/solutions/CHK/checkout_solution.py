@@ -20,9 +20,21 @@ PriceList     = { 'A':50, 'B':30, 'C':20, 'D':15, 'E':40 }
 SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)], 'D':[(1,15)], 'E':[(1,40)] } # , 'E':[(2,'B')] }
 FreeOffers    = { 'E':[(2,'B')] } 
 
+TESTING = False	# set to True when debugging
+
 # debug options ...
-#debug = print    		# uncomment - to turn on extra debug and comment out line below
+
+### debug = print    		# uncomment - to turn on extra debug and comment out line below
 def debug(*argv): pass	# comment out for additional debug...
+
+def skusValid(cntSkus):
+	''' check the skus all exist in the sperciaqlOffers '''
+	sk = SpecialOffers.keys()
+	ck = cntSkus.keys()
+	valid = all (k in sk for k in ck)
+	debug ("sk: {} ck:  {}== {}".format(sk,ck,valid))
+	return valid
+
 
 def tot_free_offers(cc, num, cntSkus ):
     '''
@@ -73,6 +85,8 @@ def checkout(skus):
 	                2C = 2C(40)      ==> 265
 	'''
 	cntSkus = Counter([x for x in skus])
+	if not skusValid(cntSkus):
+		return -1
 	tot = 0
 	grand_tot = 0
 	debug(SpecialOffers)
@@ -90,7 +104,8 @@ def checkout(skus):
 def test():
 	goods = "AAAABBCC"
 	res = checkout(goods)
-	print ("test 1 - res: {} ==> ".format(res) + "True" if (res == 265) else "False")
+	stat = "True" if (res == 265) else "False"
+	print ("test 1 - res: {} ==> {}".format(res,stat))
 
 	goods = "AAAEE"
 	res = checkout(goods)
@@ -113,5 +128,14 @@ def test():
 	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
 	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
 
+#   invalid data tests
+	data = [ "a", "-", "ABCa"]
+	for goods in data:
+		goods = "a"
+		res = checkout(goods)
+		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
+
+
 # unit testing
-### test()
+if TESTING:
+	test()
