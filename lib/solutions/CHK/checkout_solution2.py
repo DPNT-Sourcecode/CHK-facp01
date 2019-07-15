@@ -30,6 +30,7 @@ def debug(*argv): pass	# comment out for additional debug...
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
 	validSkus = map(lambda x: x in cntSkus, SpecialOffers.keys())
+	print("{} == {}".format(cntSkus,validSkus))
 	return all(validSkus)
 
 
