@@ -24,7 +24,7 @@ TESTING = False	# set to True when debugging
 
 # debug options ...
 
-### debug = print    		# uncomment - to turn on extra debug and comment out line below
+# debug = print    		# uncomment - to turn on extra debug and comment out line below
 def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
@@ -42,7 +42,7 @@ def tot_free_offers(cc, num, cntSkus ):
     eg. EEEEE => EE EE (2) E (1) => B B E =>  -45 + 40
     '''
     grand_tot = 0
-    fo = FreeOffers.get(cc,())		# B => [(2,45),(1,30)]
+    fo = FreeOffers.get(cc,())			# 'E':[(2,'B')]
     fo = sorted(fo,reverse=True)   		# sort is descending order
 
     for ff in fo: 						# loop through free offers
@@ -50,10 +50,11 @@ def tot_free_offers(cc, num, cntSkus ):
         f0,f1 = ff[0], ff[1]			# E == 2 'B'
         n0 =  (num//f0);				# EEEEE => EE EE (2) E (1) ==> 2
         numf1 = cntSkus.get(f1,0)				# actual number of "free" Bs ordered
-        debug ("eligible for {} free {} - actual: {}".format(n0,f1,numf1))
+        debug ("eligible for {} free {} - actual: {}".format(n0,f1,numf1))   # eligible for 1 free B - actual: 2
         num_free = min(n0,numf1)		# you only get discount if actually ordered the free sku "B"
-        tot = price_sku(f1,num_free)
-        grand_tot += tot
+        tot1 = price_sku(f1,num_free)	# 1 == 30
+        tot2 = price_sku(f1,numf1)		# 2 == 45
+        grand_tot += (tot2 - tot1)
         debug ("tot_free_offers - grand_tot: {}".format(grand_tot))
     return grand_tot
 
@@ -135,6 +136,10 @@ def test():
 		res = checkout(goods)
 		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
 
+	goods = "ABCDEABCDE"
+	res = checkout(goods)
+	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == 280) else "False")
+	
 
 # unit testing
 if TESTING:
