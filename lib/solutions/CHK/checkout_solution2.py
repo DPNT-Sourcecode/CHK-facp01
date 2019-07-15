@@ -20,7 +20,7 @@ PriceList     = { 'A':50, 'B':30, 'C':20, 'D':15, 'E':40 }
 SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)], 'D':[(1,15)], 'E':[(1,40)] } # , 'E':[(2,'B')] }
 FreeOffers    = { 'E':[(2,'B')] } 
 
-TESTING = True	# set to True when debugging
+TESTING = False	# set to True when debugging
 
 # debug options ...
 
@@ -29,9 +29,11 @@ def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
-	validSkus = map(lambda x: x in cntSkus, SpecialOffers.keys())
-	print("{} == {}".format(cntSkus,validSkus))
-	return all(validSkus)
+	sk = SpecialOffers.keys()
+	ck = cntSkus.keys()
+	valid = all (k in sk for k in ck)
+	debug ("sk: {} ck:  {}== {}".format(sk,ck,valid))
+	return valid
 
 
 def tot_free_offers(cc, num, cntSkus ):
@@ -102,7 +104,8 @@ def checkout(skus):
 def test():
 	goods = "AAAABBCC"
 	res = checkout(goods)
-	print ("test 1 - res: {} ==> ".format(res) + "True" if (res == 265) else "False")
+	stat = "True" if (res == 265) else "False"
+	print ("test 1 - res: {} ==> {}".format(res,stat))
 
 	goods = "AAAEE"
 	res = checkout(goods)
