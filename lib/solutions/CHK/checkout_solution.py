@@ -20,7 +20,7 @@ PriceList     = { 'A':50, 'B':30, 'C':20, 'D':15, 'E':40 }
 SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)], 'D':[(1,15)], 'E':[(1,40)] } # , 'E':[(2,'B')] }
 FreeOffers    = { 'E':[(2,'B')] } 
 
-TESTING = True	# set to True when debugging
+TESTING = False	# set to True when debugging
 
 # debug options ...
 
