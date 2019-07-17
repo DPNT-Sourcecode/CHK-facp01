@@ -24,8 +24,8 @@ TESTING = False	# set to True when debugging
 
 # debug options ...
 
-debug = print    		# uncomment - to turn on extra debug and comment out line below
-#def debug(*argv): pass	# comment out for additional debug...
+#debug = print    		# uncomment - to turn on extra debug and comment out line below
+def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
@@ -52,10 +52,11 @@ def tot_free_offers(cc, num, cntSkus ):
         numf1 = cntSkus.get(f1,0)				# actual number of "free" Bs ordered
         debug ("eligible for {} free {} - actual: {}".format(n0,f1,numf1))   # eligible for 1 free B - actual: 2
         num_free = min(n0,numf1)		# you only get discount if actually ordered the free sku "B"
-        if numf1 > 0:
-	        totF = price_sku(f1,num_free)	# 1 == 30 
+        if n0 > 0:
+	        totF = price_sku(f1,numf1-num_free)	# 1 == 30 
 	        totA = price_sku(f1,numf1)		# 2 == 45
-	        discount_tot += (totA - totF) if totA > totF else totF
+	        discount_tot += totF            # if totF > totF else totF
+	        discount_tot -= totA
         debug ("tot_free_offers - discount_tot: {}".format(discount_tot))
     return discount_tot
 
@@ -97,56 +98,57 @@ def checkout(skus):
 
 	for (cc,num) in cntSkus.items():
 		grand_tot += price_sku(cc, num)						# calc normal price
-		grand_tot -= tot_free_offers(cc, num , cntSkus)		# remove free offers (if eligible)
+		grand_tot += tot_free_offers(cc, num , cntSkus)		# remove free offers (if eligible)
 		debug ("cc: {},num: {} grand_tot: {}".format(cc,num,grand_tot))
 
 	return grand_tot
 
 # test suite...
 def test():
-# 	goods = "AAAABBCC"
-# 	res = checkout(goods)
-# 	stat = "True" if (res == 265) else "False"
-# 	print ("test 1 - res: {} ==> {}".format(res,stat))
+	goods = "AAAABBCC"
+	res = checkout(goods)
+	stat = "True" if (res == 265) else "False"
+	print ("test 1 - res: {} ==> {}".format(res,stat))
 
-# 	goods = "AAAEE"
-# 	res = checkout(goods)
-# 	print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
+	goods = "AAAEE"
+	res = checkout(goods)
+	print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
 
 
-# 	goods = "AAAEEBB"
-# 	res = checkout(goods)
-# 	print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 225) else "False")
+	goods = "AAAEEBB"
+	res = checkout(goods)
+	print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 240) else "False")  ## /??
 
-# 	goods = "ABBBBBBBBCCC"
-# 	res = checkout(goods)
-# 	print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
+	goods = "ABBBBBBBBCCC"
+	res = checkout(goods)
+	print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
 
-# 	res = price_sku('E', 3 )		# EEE
-# 	print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
+	res = price_sku('E', 3 )		# EEE
+	print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
 
-# 	skus = 'EEEEEEE'
-# 	cntSkus = Counter([x for x in skus])
-# 	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
-# 	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
+	skus = 'EEEEEEE'
+	cntSkus = Counter([x for x in skus])
+	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
+	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
 
-# #   invalid data tests
-# 	data = [ "a", "-", "ABCa"]
-# 	for goods in data:
-# 		goods = "a"
-# 		res = checkout(goods)
-# 		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
+#   invalid data tests
+	data = [ "a", "-", "ABCa"]
+	for goods in data:
+		goods = "a"
+		res = checkout(goods)
+		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
 
-	# goods = "ABCDEABCDE"
-	# res = checkout(goods)
-	# print ("test 8 - res: {} ==> ".format(res) + "True" if (res == 280) else "False")
+	goods = "ABCDEABCDE"
+	res = checkout(goods)
+	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == 280) else "False")
 	
 	goods = ("EEB",80)
 	goods = ("ABCDE",155)
-	#goods = ("EEEB",120)
-	#goods = ("ABCDEABCDE",280)
-
-
+	goods = ("EEEB",120)
+	goods = ("ABCDEABCDE",280)
+	goods = ("ABCDEABCDE",280)
+	goods = ("AAAAAEEBAAABB",455)
+	goods = ("ABCDECBAABCABBAAAEEAA",665)
 
 	res = checkout(goods[0])
 	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == goods[1]) else "False")
