@@ -14,13 +14,26 @@ from collections import Counter
 | D    | 15    |                        |
 | E    | 40    | 2E get one B free      |
 +------+-------+------------------------+
+
+Our price table and offers: 
++------+-------+------------------------+
+| Item | Price | Special offers         |
++------+-------+------------------------+
+| A    | 50    | 3A for 130, 5A for 200 |
+| B    | 30    | 2B for 45              |
+| C    | 20    |                        |
+| D    | 15    |                        |
+| E    | 40    | 2E get one B free      |
+| F    | 10    | 2F get one F free      |
++------+-------+------------------------+
+
 '''
 
 PriceList     = { 'A':50, 'B':30, 'C':20, 'D':15, 'E':40 }
 SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)], 'D':[(1,15)], 'E':[(1,40)] } # , 'E':[(2,'B')] }
-FreeOffers    = { 'E':[(2,'B')] } 
+FreeOffers    = { 'E':[(2,'B')], 'F':[(2,'F')] } 
 
-TESTING = False	# set to True when debugging
+TESTING = True	# set to True when debugging
 
 # debug options ...
 
