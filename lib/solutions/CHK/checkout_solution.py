@@ -46,7 +46,7 @@ SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)
 		'H':[(5,45),(10,80),(1,10)],   # 5H for 45, 10H for 80 \
 		'I':[(1,35)], \
 		'J':[(1,60)], \
-		'K':[(1,70), (2,150)], 	# 2K for 150 \
+		'K':[(1,70), (2,120)], 	# 2K for 150 \
 		'L':[(1,90)], \
 		'M':[(1,15)], \
 		'N':[(1,40)], \
@@ -60,8 +60,8 @@ SpecialOffers = { 'A':[(3,130),(5,200),(1,50)], 'B':[(2,45),(1,30)], 'C':[(1,20)
 		'V':[(1,50),(2,90),(3,130)], \
 		'W':[(1,20)], \
 		'X':[(1,17)], \
-		'Y':[(1,10)], \
-		'Z':[(1,50)] }
+		'Y':[(1,20)], \
+		'Z':[(1,21)] }
 
 FreeOffers    = { 'E':[(2,'B')], 'F':[(2,'F')], 'N':[(3, 'M')], 'R':[(3, 'Q')], 'U':[(3, 'U')] } 
 
@@ -72,8 +72,8 @@ TESTING = True	# set to True when debugging
 
 # debug options ...
 
-debug = print    		# uncomment - to turn on extra debug and comment out line below
-#def debug(*argv): pass	# comment out for additional debug...
+#debug = print    		# uncomment - to turn on extra debug and comment out line below
+def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
@@ -241,3 +241,4 @@ def test2():
 if TESTING:
 	#test()
 	test2()
+
