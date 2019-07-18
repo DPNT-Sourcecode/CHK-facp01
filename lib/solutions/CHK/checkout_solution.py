@@ -72,8 +72,8 @@ TESTING = True	# set to True when debugging
 
 # debug options ...
 
-#debug = print    		# uncomment - to turn on extra debug and comment out line below
-def debug(*argv): pass	# comment out for additional debug...
+debug = print    		# uncomment - to turn on extra debug and comment out line below
+#def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
@@ -163,23 +163,27 @@ def price_good(good):
     return tot	
 
 def multi_buy_discount(goods):
-	sgoods = set(goods)
-	sfree  = set(MultiBuyGoods)
-	comm = sgoods & sfree
+	comm = []
+	for g in goods:
+		if g in MultiBuyGoods:
+			comm.append(g)
+
 	discount = 0
 	pcomm = 0
 	if len(comm) >= 3:
-		pcomm = price_good(list(comm)[:3])	# which 3 do we price?
-		discount = pcomm - 45
-	print ("sgoods: {} sfree:{} comm: {} pcomm: {} discount: {}".format(sgoods,sfree,comm,pcomm,discount))
+		numMB = (len(comm) // 3)			# we may have groups of 3 mutlipbuys
+		numMBgoods = numMB * 3			# we may have groups of 3 mutlipbuys
+		pcomm = price_good(list(comm)[:numMBgoods])	# which 3 do we price?
+		discount = pcomm - (45*numMB)
+	print ("goods: {} comm: {} numMB: {} pcomm: {} discount: {}".format(goods,comm,numMB,pcomm,discount))
 	return discount
 
 
 # ---------     test suite...-------------------
 def test_goods(skus,exp):
  	res = checkout(skus)
- 	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == exp) else "False")
-
+ 	stat = "True" if (res == exp) else "False"
+ 	print ("test_goods - res: {} exp: {} ==> {}".format(res,exp,stat))
 
 def test():
 # 	goods = "AAAABBCC"
@@ -234,11 +238,14 @@ def test():
 def test2():
 	goods = "ABCXYZ"
 	goods = "XYZ"
+	goods = "SSSb"
 	disc = multi_buy_discount(goods)
+
+def test3():
+	test_goods("STXSTX",90)
 
 
 # unit testing
 if TESTING:
-	#test()
-	test2()
-
+	#test2()
+	test3()
