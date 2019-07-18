@@ -170,6 +170,7 @@ def multi_buy_discount(goods):
 
 	discount = 0
 	pcomm = 0
+	numMB = 0
 	if len(comm) >= 3:
 		numMB = (len(comm) // 3)			# we may have groups of 3 mutlipbuys
 		numMBgoods = numMB * 3			# we may have groups of 3 mutlipbuys
