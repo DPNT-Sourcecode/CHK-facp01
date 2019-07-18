@@ -166,10 +166,9 @@ def multi_buy_discount(goods):
 	sgoods = set(goods)
 	sfree  = set(MultiBuyGoods)
 	comm = sgoods & sfree
+	pcomm = price_good(comm)
 	discount = 0
-	pcomm = 0
 	if len(comm) >= 3:
-		pcomm = price_good(list(comm)[:3])	# which 3 do we price?
 		discount = pcomm - 45
 	print ("sgoods: {} sfree:{} comm: {} pcomm: {} discount: {}".format(sgoods,sfree,comm,pcomm,discount))
 	return discount
