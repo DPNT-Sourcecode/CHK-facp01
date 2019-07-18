@@ -72,8 +72,8 @@ TESTING = True	# set to True when debugging
 
 # debug options ...
 
-debug = print    		# uncomment - to turn on extra debug and comment out line below
-#def debug(*argv): pass	# comment out for additional debug...
+##debug = print    		# uncomment - to turn on extra debug and comment out line below
+def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
 	''' check the skus all exist in the sperciaqlOffers '''
@@ -162,12 +162,20 @@ def price_good(good):
     	tot += price_sku(c)
     return tot	
 
+def sort_multi_buys(goods):
+	''' crude method to sort good in price order descending '''
+	goods2 = [(price_sku(g),g) for g in goods]
+	debug (goods2)
+	goods3 = sorted(goods2,reverse=True)   # comm: [(21, 'Z'), (20, 'S'), (20, 'S'), (20, 'S')]
+	gg = [x[1] for x in goods3[:3]]
+	return gg
+
 def multi_buy_discount(goods):
 	comm = []
 	for g in goods:
 		if g in MultiBuyGoods:
 			comm.append(g)
-
+	comm = sort_multi_buys(comm)
 	discount = 0
 	pcomm = 0
 	numMB = 0
@@ -176,7 +184,7 @@ def multi_buy_discount(goods):
 		numMBgoods = numMB * 3			# we may have groups of 3 mutlipbuys
 		pcomm = price_good(list(comm)[:numMBgoods])	# which 3 do we price?
 		discount = pcomm - (45*numMB)
-	print ("goods: {} comm: {} numMB: {} pcomm: {} discount: {}".format(goods,comm,numMB,pcomm,discount))
+	debug ("goods: {} comm: {} numMB: {} pcomm: {} discount: {}".format(goods,comm,numMB,pcomm,discount))
 	return discount
 
 
@@ -187,59 +195,66 @@ def test_goods(skus,exp):
  	print ("test_goods - res: {} exp: {} ==> {}".format(res,exp,stat))
 
 def test():
-# 	goods = "AAAABBCC"
-# 	res = checkout(goods)
-# 	stat = "True" if (res == 265) else "False"
-# 	print ("test 1 - res: {} ==> {}".format(res,stat))
+	goods = "AAAABBCC"
+	res = checkout(goods)
+	stat = "True" if (res == 265) else "False"
+	print ("test 1 - res: {} ==> {}".format(res,stat))
 
-# 	goods = "AAAEE"
-# 	res = checkout(goods)
-# 	print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
+	goods = "AAAEE"
+	res = checkout(goods)
+	print ("test 2 - res: {} ==> ".format(res) + "True" if (res == 210) else "False")
 
 
-# 	goods = "AAAEEBB"
-# 	res = checkout(goods)
-# 	print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 240) else "False")  ## /??
+	goods = "AAAEEBB"
+	res = checkout(goods)
+	print ("test 3 - res: {} ==> ".format(res) + "True" if (res == 240) else "False")  ## /??
 
-# 	goods = "ABBBBBBBBCCC"
-# 	res = checkout(goods)
-# 	print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
+	goods = "ABBBBBBBBCCC"
+	res = checkout(goods)
+	print ("test 4 - res: {} ==> ".format(res) + "True" if (res == 290) else "False")
 
-# 	res = price_sku('E', 3 )		# EEE
-# 	print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
+	res = price_sku('E', 3 )		# EEE
+	print ("test 5 - res: {} ==> ".format(res) + "True" if (res == 120) else "False")
 
-# 	skus = 'EEEEEEE'
-# 	cntSkus = Counter([x for x in skus])
-# 	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
-# 	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
+	skus = 'EEEEEEE'
+	cntSkus = Counter([x for x in skus])
+	res = tot_free_offers('E', 7 , cntSkus)		# EEEEEEE
+	print ("test 6 - res: {} ==> ".format(res) + "True" if (res == 0) else "False")
 
-# #   invalid data tests
-# 	data = [ "a", "-", "ABCa"]
-# 	for goods in data:
-# 		goods = "a"
-# 		res = checkout(goods)
-# 		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
+#   invalid data tests
+	data = [ "a", "-", "ABCa"]
+	for goods in data:
+		goods = "a"
+		res = checkout(goods)
+		print ("test 7 - res: {} ==> ".format(res) + "True" if (res == -1) else "False")
 
-# 	goods = "ABCDEABCDE"
-# 	res = checkout(goods)
-# 	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == 280) else "False")
-	
-    test_goods("EEB",80)
-    test_goods("ABCDE",155)
-    test_goods("EEEB",120)
-    test_goods("ABCDEABCDE",280)
-    test_goods("ABCDEABCDE",280)
-    test_goods("AAAAAEEBAAABB",455)
-    test_goods("ABCDECBAABCABBAAAEEAA",665)
-    test_goods("F",10)
-    test_goods("FF",20)
-    test_goods("ABCDEF",165)
+	goods = "ABCDEABCDE"
+	res = checkout(goods)
+	print ("test 8 - res: {} ==> ".format(res) + "True" if (res == 280) else "False")
+
+	test_goods("EEB",80)
+	test_goods("ABCDE",155)
+	test_goods("EEEB",120)
+	test_goods("ABCDEABCDE",280)
+	test_goods("ABCDEABCDE",280)
+	test_goods("AAAAAEEBAAABB",455)
+	test_goods("ABCDECBAABCABBAAAEEAA",665)
+	test_goods("F",10)
+	test_goods("FF",20)
+	test_goods("ABCDEF",165)
+	test_goods("SSSZ",65)
+	test_goods("STXS",62)
+	test_goods("STXZ",62)
+
+
 
 
 def test2():
 	goods = "ABCXYZ"
 	goods = "XYZ"
 	goods = "SSSb"
+	goods = "SSSZ"
+
 	disc = multi_buy_discount(goods)
 
 def test3():
@@ -248,5 +263,5 @@ def test3():
 
 # unit testing
 if TESTING:
-	#test2()
-	test3()
+	test()
+	#test()
