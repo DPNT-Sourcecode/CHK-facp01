@@ -71,8 +71,7 @@ MultiBuyGoods = "STXYZ"
 TESTING = True	# set to True when debugging
 
 # debug options ...
-
-##debug = print    		# uncomment - to turn on extra debug and comment out line below
+#debug = print    		# uncomment - to turn on extra debug and comment out line below
 def debug(*argv): pass	# comment out for additional debug...
 
 def skusValid(cntSkus):
@@ -167,7 +166,7 @@ def sort_multi_buys(goods):
 	goods2 = [(price_sku(g),g) for g in goods]
 	debug (goods2)
 	goods3 = sorted(goods2,reverse=True)   # comm: [(21, 'Z'), (20, 'S'), (20, 'S'), (20, 'S')]
-	gg = [x[1] for x in goods3[:3]]
+	gg = [x[1] for x in goods3]
 	return gg
 
 def multi_buy_discount(goods):
@@ -181,8 +180,8 @@ def multi_buy_discount(goods):
 	numMB = 0
 	if len(comm) >= 3:
 		numMB = (len(comm) // 3)			# we may have groups of 3 mutlipbuys
-		numMBgoods = numMB * 3			# we may have groups of 3 mutlipbuys
-		pcomm = price_good(list(comm)[:numMBgoods])	# which 3 do we price?
+		numMBgoods = numMB * 3				
+		pcomm = price_good(list(comm)[:numMBgoods])	# price the most expensive 3/6/...?
 		discount = pcomm - (45*numMB)
 	debug ("goods: {} comm: {} numMB: {} pcomm: {} discount: {}".format(goods,comm,numMB,pcomm,discount))
 	return discount
@@ -245,6 +244,10 @@ def test():
 	test_goods("SSSZ",65)
 	test_goods("STXS",62)
 	test_goods("STXZ",62)
+	test_goods("STXSTX",90)
+	test_goods("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ",1602)
+	test_goods("LGCKAQXFOSKZGIWHNRNDITVBUUEOZXPYAVFDEPTBMQLYJRSMJCWH",1602)
+
 
 
 
@@ -259,9 +262,13 @@ def test2():
 
 def test3():
 	test_goods("STXSTX",90)
+	test_goods("ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ",1602)
+	test_goods("LGCKAQXFOSKZGIWHNRNDITVBUUEOZXPYAVFDEPTBMQLYJRSMJCWH",1602)
+
+
 
 
 # unit testing
 if TESTING:
 	test()
-	#test()
+	#test3()
